@@ -13,8 +13,6 @@ export default function Home() {
   const [modalOpen, setModalOpen] = useRecoilState(modalState);
   const [modalType, setModalType] = useRecoilState(modalTypeState);
 
-  console.log(modalType);
-
   const router = useRouter();
   const { status } = useSession({
     required: true,
