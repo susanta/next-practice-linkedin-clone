@@ -1,11 +1,38 @@
+import { useSession } from 'next-auth/react';
 import { useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { modalState } from '../atoms/modalAtoms';
 
 function Form() {
   const [input, setInput] = useState('');
   const [photoUrl, setPhotoUrl] = useState('');
+  const [modalOpen, setModalOpen] = useRecoilState(modalState);
+
+  const { data: session } = useSession();
 
   const uploadPost = async (e) => {
     e.preventDefault();
+
+    const response = await fetch('/api/posts', {
+      method: 'POST',
+      body: JSON.stringify({
+        input: input,
+        photoUrl: photoUrl,
+        username: session.user.name,
+        email: session.user.email,
+        userImg: session.user.image,
+        createdAt: new Date().toString(),
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    const responseData = await response.json();
+
+    console.log(responseData);
+
+    setModalOpen(false);
   };
 
   return (
@@ -20,7 +47,7 @@ function Form() {
       <input
         type="text"
         placeholder="Add a photo URL(optional)"
-        className="bg-transparent focus:outline-none truncate max-x-xs md:max-w-sm dark:placeholder-white/75"
+        className="bg-transparent focus:outline-none truncate max-w-xs md:max-w-sm dark:placeholder-white/75"
         value={photoUrl}
         onChange={(e) => setPhotoUrl(e.target.value)}
       />
