@@ -11,6 +11,7 @@ import ThumbUpOffAltRoundedIcon from '@mui/icons-material/ThumbUpOffAltRounded';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import ReplyRoundedIcon from '@mui/icons-material/ReplyRounded';
 import { useSession } from 'next-auth/react';
+import TimeAgo from 'timeago-react';
 
 const Post = ({ post, modalPost }) => {
   const { data: session } = useSession();
@@ -40,7 +41,10 @@ const Post = ({ post, modalPost }) => {
           <p className="text-small dark:text-white/75 opacity-80">
             {post.email}
           </p>
-          {/* Timeago stamp */}
+          <TimeAgo
+            datetime={post.createdAt}
+            className="text-xs dark:text-white/75 opacity-80"
+          />
         </div>
         {modalPost ? (
           <IconButton onClick={() => setModalOpen(false)}>
