@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   if (method === 'GET') {
     try {
       const posts = await db
-        .collection('post')
+        .collection('posts')
         .find()
         .sort({ timestamp: -1 })
         .toArray();
