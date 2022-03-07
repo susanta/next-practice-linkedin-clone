@@ -4,7 +4,7 @@ import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import { useRecoilState } from 'recoil';
 import { modalState, modalTypeState } from '../atoms/modalAtoms';
 import { useState } from 'react';
-import { getPostState } from '../atoms/postAtom';
+import { getPostState, handlePostState } from '../atoms/postAtom';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import ThumbUpOffAltOutlinedIcon from '@mui/icons-material/ThumbUpOffAltOutlined';
 import ThumbUpOffAltRoundedIcon from '@mui/icons-material/ThumbUpOffAltRounded';
@@ -20,11 +20,20 @@ const Post = ({ post, modalPost }) => {
   const [modalType, setModalType] = useRecoilState(modalTypeState);
   const [postState, setPostState] = useRecoilState(getPostState);
   const [liked, setLiked] = useState(false);
+  const [handlePost, setHandlePost] = useRecoilState(handlePostState);
 
   const truncate = (string, n) =>
     string?.length > n ? string.substr(0, n - 1) + '...see more' : string;
 
-  const deletePost = () => {};
+  const deletePost = async () => {
+    const response = await fetch(`/api/posts/${post._id}`, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    });
+
+    setHandlePost(true);
+    setModalOpen(false);
+  };
 
   return (
     <div
